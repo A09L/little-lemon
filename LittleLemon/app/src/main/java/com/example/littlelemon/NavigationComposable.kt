@@ -1,30 +1,42 @@
 package com.example.littlelemon
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import android.content.Context
+import android.util.Log
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import com.example.littlelemon.ui.theme.LittleLemonTheme
 
 
 @Composable
-fun Home() {
-    Text(
-        text = "Home",
-    )
-}
+fun MyNavigation(context: Context, navController: NavHostController, items: List<MenuItemRoom>) {
 
-@Preview(showBackground = true)
-@Composable
-fun HomePreview() {
-    LittleLemonTheme {
-        Home()
+    // startDestination
+    val sharedPreferences = context.getSharedPreferences("users", Context.MODE_PRIVATE)
+    val userDataStored = sharedPreferences.getBoolean("user_data_stored", false)
+
+    //val startDestination = if (userDataStored) Home.route else Onboarding.route
+    val startDestination = Home.route
+
+    NavHost(
+        navController = navController,
+        startDestination = startDestination
+    ) {
+        composable(Home.route) {
+            Home(context, navController, items)
+        }
+        composable(Onboarding.route) {
+            Onboarding(context, navController)
+        }
+        composable(Profile.route) {
+            Profile(context, navController)
+        }
+
 
     }
+
 }
